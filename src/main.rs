@@ -1,19 +1,23 @@
-use std::path::PathBuf;
-use std::io::{BufRead, BufReader};
 use std::collections::{HashMap, HashSet};
+use std::io::{BufRead, BufReader};
+use std::path::PathBuf;
 
 fn solve(puzzle: &str, size: usize, ws: &HashSet<String>) -> String {
-let mut counts: HashMap<&str, usize> = HashMap::new();
+    let mut counts: HashMap<&str, usize> = HashMap::new();
     let low_puzzle = puzzle.to_lowercase();
     let parts: Vec<&str> = low_puzzle.split('/').collect();
 
     let min_length: usize = parts.iter().map(|p| p.len()).max().unwrap_or(0) + size;
     let max_length: usize = parts.iter().map(|p| p.len()).min().unwrap_or(0) + size;
 
-    let valid_words: HashSet<&str> = ws.iter().filter(|w| {
-        let word_len = w.len();
-        word_len == min_length || word_len == max_length
-    }).map(|w| w.as_str()).collect();
+    let valid_words: HashSet<&str> = ws
+        .iter()
+        .filter(|w| {
+            let word_len = w.len();
+            word_len == min_length || word_len == max_length
+        })
+        .map(|w| w.as_str())
+        .collect();
 
     for word in valid_words {
         for part in &parts {
@@ -29,7 +33,11 @@ let mut counts: HashMap<&str, usize> = HashMap::new();
         }
     }
 
-    counts.into_iter().filter_map(|(k, v)| if v >= 3 { Some(k) } else { None }).collect::<Vec<&str>>().join(" ")
+    counts
+        .into_iter()
+        .filter_map(|(k, v)| if v >= 3 { Some(k) } else { None })
+        .collect::<Vec<&str>>()
+        .join(" ")
 }
 
 fn get_library_path() -> PathBuf {
@@ -38,13 +46,20 @@ fn get_library_path() -> PathBuf {
     file_path
 }
 
-fn main() {
+fn get_word_list() -> HashSet<String> {
     let file_path = get_library_path();
     let file = std::fs::File::open(&file_path).expect("Failed to open file.");
     let reader = BufReader::new(file);
-    let word_search: HashSet<String> = reader.lines()
+    let word_search: HashSet<String> = reader
+        .lines()
         .map(|line| line.expect("Failed to read line").to_lowercase())
         .collect();
+
+    word_search
+}
+
+fn main() {
+    let word_search = get_word_list();
 
     // TODO: move into test cases
     println!("SOLVE FOR 1: {}", solve("TUN/GON/IN", 3, &word_search));
