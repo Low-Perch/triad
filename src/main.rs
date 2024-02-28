@@ -1,6 +1,6 @@
 mod solver;
 
-use solver::{solve, get_word_list};
+use solver::{get_word_list, solve};
 
 fn main() {
     let word_search = get_word_list();
@@ -9,7 +9,7 @@ fn main() {
 
     if args.len() < 3 {
         println!("Usage: <puzzle> <size>");
-        return
+        return;
     }
 
     let puzzle = &args[1];
@@ -23,9 +23,16 @@ fn main() {
 
     let result = solve(puzzle, size, &word_search);
 
-    if result.is_empty() {
-        println!("No solution found for puzzle {} with size {}. Please verify the puzzle and size.", puzzle, size)
+    if result.solution.is_empty() {
+        println!(
+            "No solution found for puzzle {} with size {}. Please verify the puzzle and size.",
+            puzzle, size
+        )
     } else {
-        println!("Solution for puzzle {} is {}", puzzle, result.to_uppercase())
+        println!(
+            "Solution for puzzle {} with size {} is {}.",
+            puzzle, size, result.solution
+        );
+        println!("Words in puzzle: {:?}.", &result.words_used[..=2]);
     }
 }
