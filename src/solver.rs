@@ -26,6 +26,7 @@ pub struct SolveResult {
     pub words_used: Vec<String>,
 }
 
+// Get valid words based on puzzle parts and word set
 fn get_valid_words<'a>(
     parts: &'a Vec<&'a str>,
     size: usize,
@@ -43,13 +44,15 @@ fn get_valid_words<'a>(
         .collect()
 }
 
-pub fn solve(puzzle: &str, size: usize, ws: &HashSet<String>) -> SolveResult {
+// Count prefix occurrences for each valid word
+fn count_prefix_suffix<'a>(
+    valid_words: &HashSet<&'a str>,
+    parts: &'a [&'a str],
+    size: usize,
+) -> (HashMap<&'a str, usize>, HashSet<&'a str>) {
     let mut counts: HashMap<&str, usize> = HashMap::new();
     let mut prefix: HashSet<&str> = HashSet::new();
-    let mut suffix: HashSet<&str> = HashSet::new();
-    let parts: Vec<&str> = puzzle.split('/').collect();
 
-    let valid_words = get_valid_words(&parts, size, &ws);
     let low_parts: Vec<String> = parts.iter().map(|part| part.to_lowercase()).collect();
 
     for word in valid_words {
@@ -62,20 +65,27 @@ pub fn solve(puzzle: &str, size: usize, ws: &HashSet<String>) -> SolveResult {
                     prefix.insert(word);
                 } else if word.ends_with(&*part) {
                     *counts.entry(&word[..size]).or_insert(0) += 1;
-                    suffix.insert(word);
                 }
             }
         }
     }
 
-    let solution = counts
+    (counts, prefix)
+}
+
+// Calculate solution based on counts
+fn calculate_solution(counts: &HashMap<&str, usize>) -> String {
+    counts
         .into_iter()
-        .filter_map(|(k, v)| if v >= 3 { Some(k) } else { None })
+        .filter_map(|(k, v)| if *v >= 3 { Some(*k) } else { None })
         .collect::<Vec<&str>>()
         .join(" ")
-        .to_uppercase();
+        .to_uppercase()
+}
 
-    let words_solution: Vec<String> = low_parts
+// Generate words solution
+fn generate_words_solution(solution: &str, parts: &[&str], prefix: &HashSet<&str>) -> Vec<String> {
+    parts
         .iter()
         .map(|part| {
             let at_start = format!("{}{}", part, solution).to_lowercase();
@@ -87,7 +97,17 @@ pub fn solve(puzzle: &str, size: usize, ws: &HashSet<String>) -> SolveResult {
 
             at_end.to_uppercase()
         })
-        .collect();
+        .collect()
+}
+
+pub fn solve(puzzle: &str, size: usize, ws: &HashSet<String>) -> SolveResult {
+    let parts: Vec<&str> = puzzle.split('/').collect();
+    let valid_words = get_valid_words(&parts, size, &ws);
+
+    let (counts, prefix) = count_prefix_suffix(&valid_words, &parts, size);
+
+    let solution = calculate_solution(&counts);
+    let words_solution = generate_words_solution(&solution, &parts, &prefix);
 
     let words_used = if words_solution.len() < 3 {
         Vec::new()
