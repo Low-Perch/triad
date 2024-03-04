@@ -1,3 +1,5 @@
+#![warn(clippy::all, clippy::pedantic)]
+
 mod solver;
 
 use solver::{get_word_list, solve};
@@ -13,25 +15,21 @@ fn main() {
     }
 
     let puzzle = &args[1];
-    let size: usize = match args[2].parse() {
-        Ok(s) => s,
-        Err(_) => {
-            println!("Invalid Size. Size must be >= 3");
-            return;
-        }
+    let size: usize = if let Ok(s) = args[2].parse() {
+        s
+    } else {
+        println!("Invalid Size. Size must be >= 3");
+        return;
     };
 
     let result = solve(puzzle, size, &word_search);
 
     if result.solution.is_empty() {
-        println!(
-            "No solution found for puzzle {} with size {}. Please verify the puzzle and size.",
-            puzzle, size
-        )
+        println!("No solution found for puzzle {puzzle} with size {size}. Please verify the puzzle and size.");
     } else {
         println!(
-            "Solution for puzzle {} with size {} is {}.",
-            puzzle, size, result.solution
+            "Solution for puzzle {puzzle} with size {size} is {}.",
+            result.solution
         );
         println!("Words in puzzle: {:?}.", &result.words_used[..=2]);
     }

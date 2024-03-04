@@ -4,13 +4,12 @@ use std::path::PathBuf;
 
 fn get_library_path() -> PathBuf {
     let path = std::env::current_dir().expect("Failed to get current directory.");
-    let file_path = path.join("src/resources/dict.txt");
-    file_path
+    path.join("src/resources/dict.txt")
 }
 
 pub fn get_word_list() -> HashSet<String> {
     let file_path = get_library_path();
-    let file = std::fs::File::open(&file_path).expect("Failed to open file.");
+    let file = std::fs::File::open(file_path).expect("Failed to open file.");
     let reader = BufReader::new(file);
     let word_search: HashSet<String> = reader
         .lines()
@@ -28,7 +27,7 @@ pub struct SolveResult {
 
 // Get valid words based on puzzle parts and word set
 fn get_valid_words<'a>(
-    parts: &'a Vec<&'a str>,
+    parts: &'a [&'a str],
     size: usize,
     ws: &'a HashSet<String>,
 ) -> HashSet<&'a str> {
@@ -40,7 +39,7 @@ fn get_valid_words<'a>(
             let word_len = w.len();
             word_len == min_length || word_len == max_length
         })
-        .map(|w| w.as_str())
+        .map(std::string::String::as_str)
         .collect()
 }
 
@@ -60,10 +59,10 @@ fn count_prefix_suffix<'a>(
             let word_len = word.len();
             let part_len = part.len();
             if part_len + size == word_len {
-                if word.starts_with(&*part) {
+                if word.starts_with(part) {
                     *counts.entry(&word[word_len - size..]).or_insert(0) += 1;
                     prefix.insert(word);
-                } else if word.ends_with(&*part) {
+                } else if word.ends_with(part) {
                     *counts.entry(&word[..size]).or_insert(0) += 1;
                 }
             }
@@ -76,7 +75,7 @@ fn count_prefix_suffix<'a>(
 // Calculate solution based on counts
 fn calculate_solution(counts: &HashMap<&str, usize>) -> String {
     counts
-        .into_iter()
+        .iter()
         .filter_map(|(k, v)| if *v >= 3 { Some(*k) } else { None })
         .collect::<Vec<&str>>()
         .join(" ")
@@ -88,8 +87,8 @@ fn generate_words_solution(solution: &str, parts: &[&str], prefix: &HashSet<&str
     parts
         .iter()
         .map(|part| {
-            let at_start = format!("{}{}", part, solution).to_lowercase();
-            let at_end = format!("{}{}", solution, part).to_lowercase();
+            let at_start = format!("{part}{solution}").to_lowercase();
+            let at_end = format!("{solution}{part}").to_lowercase();
 
             if prefix.contains(&at_start as &str) {
                 return at_start.to_uppercase();
@@ -101,8 +100,8 @@ fn generate_words_solution(solution: &str, parts: &[&str], prefix: &HashSet<&str
 }
 
 pub fn solve(puzzle: &str, size: usize, ws: &HashSet<String>) -> SolveResult {
-    let parts: Vec<&str> = puzzle.split('/').map(|word| word.trim()).collect();
-    let valid_words = get_valid_words(&parts, size, &ws);
+    let parts: Vec<&str> = puzzle.split('/').map(str::trim).collect();
+    let valid_words = get_valid_words(&parts, size, ws);
 
     let (counts, prefix) = count_prefix_suffix(&valid_words, &parts, size);
 
