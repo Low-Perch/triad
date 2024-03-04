@@ -101,7 +101,7 @@ fn generate_words_solution(solution: &str, parts: &[&str], prefix: &HashSet<&str
 }
 
 pub fn solve(puzzle: &str, size: usize, ws: &HashSet<String>) -> SolveResult {
-    let parts: Vec<&str> = puzzle.split('/').collect();
+    let parts: Vec<&str> = puzzle.split('/').map(|word| word.trim()).collect();
     let valid_words = get_valid_words(&parts, size, &ws);
 
     let (counts, prefix) = count_prefix_suffix(&valid_words, &parts, size);

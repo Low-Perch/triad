@@ -15,7 +15,8 @@ mod test {
         assert_eq!(result1.solution, "DRA");
         assert_eq!(result1.words_used, ["TUNDRA", "DRAGON", "DRAIN"]);
 
-        let result2 = solve("RLY/LIN/MIL", 4, &word_list);
+        // empty space is valid
+        let result2 = solve("RLY / LIN / MIL", 4, &word_list);
         assert_eq!(result2.solution, "EAGE");
         assert_eq!(result2.words_used, ["EAGERLY", "LINEAGE", "MILEAGE"]);
     }
