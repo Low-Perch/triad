@@ -31,13 +31,13 @@ fn get_valid_words<'a>(
     size: usize,
     ws: &'a HashSet<String>,
 ) -> HashSet<&'a str> {
-    let min_length: usize = parts.iter().map(|p| p.len()).max().unwrap_or(0) + size;
-    let max_length: usize = parts.iter().map(|p| p.len()).min().unwrap_or(0) + size;
+    let min_length: usize = parts.iter().map(|p| p.len()).min().unwrap_or(0) + size;
+    let max_length: usize = parts.iter().map(|p| p.len()).max().unwrap_or(0) + size;
 
     ws.iter()
         .filter(|w| {
             let word_len = w.len();
-            word_len == min_length || word_len == max_length
+            word_len >= min_length && word_len <= max_length
         })
         .map(std::string::String::as_str)
         .collect()
