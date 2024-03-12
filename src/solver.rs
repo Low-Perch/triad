@@ -72,8 +72,8 @@ fn count_prefix_suffix<'a>(
     (counts, prefix)
 }
 
-// Calculate solution based on counts
-fn calculate_solution(counts: &HashMap<&str, usize>) -> String {
+// Calculate solutions based on counts
+fn calculate_solutions(counts: &HashMap<&str, usize>) -> String {
     counts
         .iter()
         .filter_map(|(k, v)| if *v >= 3 { Some(*k) } else { None })
@@ -104,8 +104,16 @@ pub fn solve(puzzle: &str, size: usize, ws: &HashSet<String>) -> SolveResult {
     let valid_words = get_valid_words(&parts, size, ws);
 
     let (counts, prefix) = count_prefix_suffix(&valid_words, &parts, size);
+    let possible_solutions = calculate_solutions(&counts);
 
-    let solution = calculate_solution(&counts);
+    let solution = if possible_solutions.contains(' ') {
+        let mut solutions_list: Vec<&str> = possible_solutions.split_whitespace().collect();
+        solutions_list.sort_unstable();
+        solutions_list.first().map_or("", |&word| word).to_string()
+    } else {
+        possible_solutions
+    };
+
     let words_solution = generate_words_solution(&solution, &parts, &prefix);
 
     let words_used = if words_solution.len() < 3 {
