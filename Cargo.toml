@@ -8,6 +8,14 @@ authors = ["cdrani"]
 
 [dependencies]
 
+[[bin]]
+name = "triword"
+path = "src/bin/main.rs"
+
+[lib]
+name = "triword"
+path = "src/lib/solver.rs"
+
 [[test]]
 name ="test_suite"
 path = "src/test.rs"

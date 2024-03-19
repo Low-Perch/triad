@@ -1,8 +1,8 @@
 #![warn(clippy::all, clippy::pedantic)]
 
-mod solver;
+extern crate triword;
 
-use solver::{get_word_list, solve};
+use triword::{get_word_list, solve};
 
 fn main() {
     let word_search = get_word_list();
