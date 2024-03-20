@@ -11,10 +11,13 @@ authors = ["cdrani"]
 [[bin]]
 name = "triword"
 path = "src/bin/main.rs"
+test = false
 
 [lib]
 name = "triword"
 path = "src/lib/solver.rs"
+doctest = false
+test = false
 
 [[test]]
 name ="test_suite"
