@@ -1,19 +1,11 @@
 use std::collections::{HashMap, HashSet};
-use std::io::{BufRead, BufReader};
-use std::path::PathBuf;
-
-fn get_library_path() -> PathBuf {
-    let path = std::env::current_dir().expect("Failed to get current directory.");
-    path.join("src/resources/dict.txt")
-}
 
 pub fn get_word_list() -> HashSet<String> {
-    let file_path = get_library_path();
-    let file = std::fs::File::open(file_path).expect("Failed to open file.");
-    let reader = BufReader::new(file);
-    let word_search: HashSet<String> = reader
+    let file_contents = include_str!("../resources/dict.txt");
+
+    let word_search: HashSet<String> = file_contents
         .lines()
-        .map(|line| line.expect("Failed to read line").to_lowercase())
+        .map(|line| line.to_lowercase())
         .collect();
 
     word_search
