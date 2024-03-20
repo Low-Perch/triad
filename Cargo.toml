@@ -22,3 +22,6 @@ test = false
 [[test]]
 name ="test_suite"
 path = "src/test.rs"
+
+[profile.release]
+strip = "debuginfo"
