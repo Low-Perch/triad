@@ -7,6 +7,7 @@ authors = ["cdrani"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+clap = "4.5.4"
 rand = "0.8.5"
 serde_json = "1.0.114"
 
