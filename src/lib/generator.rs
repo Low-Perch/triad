@@ -1,6 +1,6 @@
 use rand::{thread_rng, Rng};
-use std::collections::HashSet;
 use serde_json::{Result, Value};
+use std::collections::HashSet;
 
 pub fn generate(key: Option<String>) -> Result<()> {
     let data = read_json_data()?;
@@ -8,7 +8,10 @@ pub fn generate(key: Option<String>) -> Result<()> {
 
     match random_key.is_empty() {
         true => {
-            println!("{:?} is not a valid puzzle key. Provide another key or use default random option.", key.unwrap_or_default());
+            println!(
+                "{:?} is not a valid puzzle key. Provide another key or use default random option.",
+                key.unwrap_or_default()
+            );
         }
         false => {
             let selected_words = select_three_words(&data, &random_key);
@@ -44,8 +47,12 @@ fn get_random_key(data: &Value) -> String {
 }
 
 fn select_three_words(data: &Value, key: &str) -> Vec<String> {
-    let prefix = data[key]["prefix"].as_array().map_or(Vec::new(), |v| v.to_vec());
-    let suffix = data[key]["suffix"].as_array().map_or(Vec::new(), |v| v.to_vec());
+    let prefix = data[key]["prefix"]
+        .as_array()
+        .map_or(Vec::new(), |v| v.to_vec());
+    let suffix = data[key]["suffix"]
+        .as_array()
+        .map_or(Vec::new(), |v| v.to_vec());
 
     let mut selected_words = HashSet::new();
 
@@ -55,7 +62,11 @@ fn select_three_words(data: &Value, key: &str) -> Vec<String> {
 
     // Fill in the remaining slots
     while selected_words.len() < 3 {
-        let prefix_or_suffix = if thread_rng().gen_bool(0.5) { &prefix } else { &suffix };
+        let prefix_or_suffix = if thread_rng().gen_bool(0.5) {
+            &prefix
+        } else {
+            &suffix
+        };
         if !prefix_or_suffix.is_empty() {
             select_word(prefix_or_suffix, &mut selected_words);
         }
