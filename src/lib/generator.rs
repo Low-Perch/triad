@@ -4,7 +4,7 @@ use serde_json::{Result, Value};
 
 pub fn generate(key: Option<String>) -> Result<()> {
     let data = read_json_data()?;
-    let random_key = get_key(key.as_ref().map(String::as_str), &data);
+    let random_key = get_key(key.as_deref(), &data);
 
     match random_key.is_empty() {
         true => {
@@ -33,7 +33,7 @@ fn get_key(key: Option<&str>, data: &Value) -> String {
                 key.to_string()
             }
         }
-        None => get_random_key(&data),
+        None => get_random_key(data),
     }
 }
 
