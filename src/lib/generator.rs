@@ -8,7 +8,7 @@ pub fn generate(key: Option<String>) -> Result<()> {
 
     match random_key.is_empty() {
         true => {
-            println!("{:?} is not viable. Provide another key or use default random option.", key.unwrap_or_default());
+            println!("{:?} is not a valid puzzle key. Provide another key or use default random option.", key.unwrap_or_default());
         }
         false => {
             let selected_words = select_three_words(&data, &random_key);
