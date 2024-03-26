@@ -11,11 +11,14 @@ use triword::{
 fn main() {
     let cmd = Command::new("triword")
         .bin_name("triword")
+        .version("0.1.0")
         .about("Triword Puzzle Generator and Solver")
         .subcommand_required(true)
         .arg_required_else_help(true)
         .subcommand(
             Command::new("solve")
+                .short_flag('s')
+                .long_flag("solve")
                 .about("Solve puzzle")
                 .arg(arg!(<PUZZLE> "Puzzle to solve"))
                 .arg(arg!(<SIZE> "Puzzle key size").value_parser(clap::value_parser!(usize)))
@@ -23,6 +26,8 @@ fn main() {
         )
         .subcommand(
             Command::new("generate")
+                .short_flag('g')
+                .long_flag("generate")
                 .about("Generate random puzzle unless key is provided")
                 .arg(arg!(<KEY> "Generate puzzle from key").required(false)),
         );
