@@ -30,10 +30,10 @@ fn read_json_data() -> Result<Value> {
 fn get_key(key: Option<&str>, data: &Value) -> String {
     match key {
         Some(key) => {
-            if data[key].is_null() {
+            if data[key.to_lowercase()].is_null() {
                 String::from("")
             } else {
-                key.to_string()
+                key.to_lowercase().to_string()
             }
         }
         None => get_random_key(data),
