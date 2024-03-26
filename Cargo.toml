@@ -17,7 +17,7 @@ test = false
 
 [lib]
 name = "triword"
-path = "src/lib/solver.rs"
+path = "src/lib/mod.rs"
 doctest = false
 test = false
 

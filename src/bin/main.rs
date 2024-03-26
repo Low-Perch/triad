@@ -2,7 +2,7 @@
 
 extern crate triword;
 
-use triword::{get_word_list, solve};
+use triword::solver::{get_word_list, solve};
 
 fn main() {
     let word_search = get_word_list();

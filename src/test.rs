@@ -1,6 +1,6 @@
 extern crate triword;
 
-use triword::{get_word_list, solve, SolveResult};
+use triword::solver::{get_word_list, solve, SolveResult};
 
 #[cfg(test)]
 mod test {
