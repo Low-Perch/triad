@@ -2,9 +2,17 @@ use rand::{thread_rng, Rng};
 use serde_json::{Result, Value};
 use std::collections::HashSet;
 
-pub fn generate(key: Option<String>) -> Result<()> {
+#[derive(Debug)]
+pub struct GenerateResult {
+    pub key: String,
+    pub words_used: Vec<String>,
+}
+
+pub fn generate(key: Option<String>) -> Result<GenerateResult> {
     let data = read_json_data()?;
     let random_key = get_key(key.as_deref(), &data);
+
+    let mut words_used = Vec::new();
 
     match random_key.is_empty() {
         true => {
@@ -15,11 +23,14 @@ pub fn generate(key: Option<String>) -> Result<()> {
         }
         false => {
             let selected_words = select_three_words(&data, &random_key);
-            print_selected_data(&random_key, &selected_words);
+            words_used = selected_words.clone();
         }
     }
 
-    Ok(())
+    Ok(GenerateResult {
+        words_used,
+        key: random_key,
+    })
 }
 
 fn read_json_data() -> Result<Value> {
@@ -86,9 +97,4 @@ fn select_word(words: &[Value], selected_words: &mut HashSet<String>) {
             }
         }
     }
-}
-
-fn print_selected_data(key: &str, words: &[String]) {
-    println!("Random key: {}", key);
-    println!("Random 3 words: {:?}", words);
 }

@@ -4,7 +4,7 @@ extern crate triword;
 
 use clap::{arg, Command};
 use triword::{
-    generator::generate,
+    generator::{generate, GenerateResult},
     solver::{get_word_list, solve},
 };
 
@@ -56,7 +56,12 @@ fn main() {
             let key = submatches
                 .get_one::<String>("KEY")
                 .map(std::clone::Clone::clone);
-            let _ = generate(key);
+            if let Ok(GenerateResult { words_used, key }) = generate(key) {
+                println!("Key: {key}");
+                println!("Puzzle: {words_used:?}");
+            } else {
+                println!("An error occurred generating puzzle.");
+            }
         }
         _ => unreachable!(),
     }
