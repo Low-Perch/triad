@@ -1,18 +1,18 @@
 #![warn(clippy::all, clippy::pedantic)]
 
-extern crate triword;
+extern crate triad;
 
 use clap::{arg, Command};
-use triword::{
+use triad::{
     generator::{generate, GenerateResult},
     solver::{get_word_list, solve},
 };
 
 fn main() {
-    let cmd = Command::new("triword")
-        .bin_name("triword")
+    let cmd = Command::new("triad")
+        .bin_name("triad")
         .version("0.1.0")
-        .about("Triword Puzzle Generator and Solver")
+        .about("Triad Puzzle Generator and Solver")
         .subcommand_required(true)
         .arg_required_else_help(true)
         .subcommand(

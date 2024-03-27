@@ -221,7 +221,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "triword"
+name = "triad"
 version = "0.1.0"
 dependencies = [
  "clap",

@@ -1,5 +1,5 @@
 [package]
-name = "triword"
+name = "triad"
 version = "0.1.0"
 edition = "2021"
 authors = ["cdrani"]
@@ -12,12 +12,12 @@ rand = "0.8.5"
 serde_json = "1.0.114"
 
 [[bin]]
-name = "triword"
+name = "triad"
 path = "src/bin/main.rs"
 test = false
 
 [lib]
-name = "triword"
+name = "triad"
 path = "src/lib/mod.rs"
 doctest = false
 test = false

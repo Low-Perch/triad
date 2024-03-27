@@ -1,6 +1,6 @@
-# Triword Solver
+# Triad - Puzzle Solver & Generator
 
-Simple tool to solve [triword.net](https://triword.net) daily puzzle.
+Simple tool to solve and generate [triword.net](https://triword.net)-like puzzles.
 
 ### Usage
 
